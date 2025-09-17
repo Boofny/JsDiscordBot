@@ -1,5 +1,5 @@
-import { Client, GatewayIntentBits, ActivityType} from 'discord.js';
-import { TOKEN, TARGET_USER_ID, TARGET_USER_ID2, TARGET_USER_ID3} from './config.js';
+import { AttachmentBuilder, Client, GatewayIntentBits, ActivityType} from 'discord.js';
+import { TOKEN, TARGET_USER_ID, TARGET_USER_ID2, TARGET_USER_ID3, SELF} from './config.js';
 
 const client = new Client({
   intents: [
@@ -19,6 +19,7 @@ client.on('messageCreate', (message) => {
 
   if (message.author.id === TARGET_USER_ID) {
     message.channel.send(`Shut it hunter`);
+    c
     console.log(message.author.username, "Chatted")
   }
 
@@ -32,10 +33,10 @@ client.on('messageCreate', (message) => {
     console.log(message.author.username, "Chatted")
   }
 
-  // if (message.author.id === SELF) {
-  //   message.channel.send(`You so tuff and handsome twin!`);
-  //   console.log(message.author.username, "Chatted")
-  // }
+  if (message.author.id === SELF) {
+    // message.channel.send(`You so tuff and handsome twin!`);
+    console.log(message.author.username, "Chatted")
+  }
   const content = message.content.toLowerCase()
   if (content.includes("crack") || content.includes("Crack")){
     message.channel.send("We all craking julio and hunter")
@@ -46,6 +47,11 @@ client.on('messageCreate', (message) => {
       message.channel.send("Not you hunter");
     }
     message.channel.send(`${message.author}, Is in love with hunter for his money.`);
+  }
+
+  if (content.includes("!pic")){
+    const file = new AttachmentBuilder('./Pics/tuff.png'); // path to your file
+    message.channel.send({ files: [file] });
   }
 
 });
