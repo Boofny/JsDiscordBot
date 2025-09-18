@@ -1,5 +1,5 @@
-import { AttachmentBuilder, Client, GatewayIntentBits, ActivityType} from 'discord.js';
-import { TOKEN, TARGET_USER_ID, TARGET_USER_ID2, TARGET_USER_ID3, SELF} from './config.js';
+import { AttachmentBuilder, Client, GatewayIntentBits, ActivityType, GuildMember} from 'discord.js';
+import { TOKEN, TARGET_USER_ID, TARGET_USER_ID2, TARGET_USER_ID3, SELF, SELFPT2} from './config.js';
 
 const client = new Client({
   intents: [
@@ -11,15 +11,15 @@ const client = new Client({
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setActivity('with my worm', { type: ActivityType.Playing });
+  client.user.setActivity('To hunter and deigo yaoi', { type: ActivityType.Listening});
 });
 
 client.on('messageCreate', (message) => {
+
   if (message.author.bot) return;
 
   if (message.author.id === TARGET_USER_ID) {
     message.channel.send(`Shut it hunter`);
-    c
     console.log(message.author.username, "Chatted")
   }
 
@@ -33,7 +33,7 @@ client.on('messageCreate', (message) => {
     console.log(message.author.username, "Chatted")
   }
 
-  if (message.author.id === SELF) {
+  if (message.author.id === SELF || message.author.id === SELFPT2) {
     // message.channel.send(`You so tuff and handsome twin!`);
     console.log(message.author.username, "Chatted")
   }
@@ -49,11 +49,12 @@ client.on('messageCreate', (message) => {
     message.channel.send(`${message.author}, Is in love with hunter for his money.`);
   }
 
-  if (content.includes("!pic")){
-    const file = new AttachmentBuilder('./Pics/tuff.png'); // path to your file
+  const pic = "https://images.pexels.com/photos/33753958/pexels-photo-33753958.jpeg";
+  if (content.includes("!pic") && message.author.id === SELFPT2){ // only those i chose
+    // const file = new AttachmentBuilder('./Pics/tuff.png'); 
+    const file = new AttachmentBuilder(pic); 
     message.channel.send({ files: [file] });
   }
-
 });
 
 client.login(TOKEN);
