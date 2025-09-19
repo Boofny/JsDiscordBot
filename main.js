@@ -51,20 +51,25 @@ client.on('messageCreate', async(message) => {
 
   const pic = "https://images.pexels.com/photos/33753958/pexels-photo-33753958.jpeg";
   if (content.includes("!pic") && message.author.id === SELFPT2){ // only those i chose
-    // const file = new AttachmentBuilder('./Pics/tuff.png'); 
+    const user = await message.guild.members.fetch(message.author.id)
+    user.setNickname("LOSER")
     const file = new AttachmentBuilder(pic); 
     message.channel.send({ files: [file] });
   }
 
-  const banned = "https://tenor.com/view/spoopy-gif-10007742458039178951";
-  // const banned = "nerd";
-  if (message.author.id === SELFPT2) {
+  if (content.includes("!test") && message.author.id === SELFPT2){ // only those i chose
+    const user = await message.guild.members.fetch(message.author.id)
+    user.setNickname(null)
+  }
+
+  const banned = "https://tenor.com/view/gorilla-monke-monkey-spin-ape-gif-25078721"
+  if (message.author.id === SELFPT2 && content.includes(banned)) {
+    await message.delete();
     // Check text content
     const hasBannedLink = message.content.includes(banned);
 
-    console.log(message.guild.members.me.permissions.has('ModerateMembers'));
-    console.log('member:', message.member);
-    // Check attachments
+    // console.log(message.guild.members.me.permissions.has('ModerateMembers')); debug logs
+    // console.log('member:', message.member);
     const hasBannedAttachment = message.attachments.some(att => att.url === banned);
 
     if (hasBannedLink || hasBannedAttachment) {
