@@ -14,7 +14,7 @@ client.on('ready', () => {
   client.user.setActivity('To hunter and deigo yaoi', { type: ActivityType.Listening});
 });
 
-client.on('messageCreate', (message) => {
+client.on('messageCreate', async(message) => {
 
   if (message.author.bot) return;
 
@@ -55,6 +55,32 @@ client.on('messageCreate', (message) => {
     const file = new AttachmentBuilder(pic); 
     message.channel.send({ files: [file] });
   }
+
+  // const banned = "https://tenor.com/view/spoopy-gif-10007742458039178951"
+  // if(content.includes(banned) && message.author.id === SELFPT2){
+  //   const member = message.guild.members.cache.get(message.author.id);
+  //   member.timeout(60_000, 'timed out')
+  // }
+
+  const banned = "https://tenor.com/view/spoopy-gif-10007742458039178951";
+  if (message.author.id === SELFPT2) {
+    // Check text content
+    const hasBannedLink = message.content.includes(banned);
+
+    // Check attachments
+    const hasBannedAttachment = message.attachments.some(att => att.url === banned);
+
+    if (hasBannedLink || hasBannedAttachment) {
+      try {
+        const member = await message.guild.members.fetch(message.author.id);
+        await member.timeout(60_000, 'Posted banned GIF');
+        message.channel.send(`${message.author} has been timed out for 1 minute.`);
+      } catch (err) {
+        console.error('Failed to timeout member:', err);
+      }
+    }
+  }
+
 });
 
 client.login(TOKEN);
