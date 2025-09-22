@@ -95,3 +95,5 @@ client.on('messageCreate', async(message) => {
 });
 
 client.login(TOKEN);
+
+//discord bot
