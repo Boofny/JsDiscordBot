@@ -1,14 +1,37 @@
 import { AttachmentBuilder, Client, GatewayIntentBits, ActivityType, GuildMember} from 'discord.js';
 import { TOKEN, TARGET_USER_ID, TARGET_USER_ID2, TARGET_USER_ID3, SELF, SELFPT2} from './config.js';
+import { joinVoiceChannel, getVoiceConnection } from '@discordjs/voice';
 
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildVoiceStates
   ]
 });
 
+client.on('messageCreate', async (message) => {
+  if (message.content === '!join') {
+    const voiceChannel = message.member?.voice.channel;
+
+    if (!voiceChannel) {
+      message.reply('You must be in a voice channel first!');
+      return;
+    }
+
+    // Join the channel
+    joinVoiceChannel({
+      channelId: voiceChannel.id,
+      guildId: voiceChannel.guild.id,
+      adapterCreator: voiceChannel.guild.voiceAdapterCreator
+    });
+
+    message.reply(`Joined ${voiceChannel.name}!`);
+  }
+});
+
+// client.login(process.env.DISCORD_TOKEN);
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity('others', { type: ActivityType.Listening});
